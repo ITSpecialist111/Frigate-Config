@@ -1,0 +1,88 @@
+```yaml
+mqtt:
+  user: {MQTT_USER}
+  password: {MQTT_PASSWORD}
+  host: 192.168.68.57
+
+go2rtc:
+  streams:
+    RLC810A:
+      - rtsp://{USERNAME}:{PASSWORD}@192.168.68.102:554/h264Preview_01_main
+    RLC810A_sub:
+      - rtsp://{USERNAME}:{PASSWORD}@192.168.68.102:554/h264Preview_01_sub
+    Backyard:
+      - rtsp://{USERNAME}:{PASSWORD}@192.168.68.100:554/h264Preview_01_main
+    Backyard_sub:
+      - rtsp://{USERNAME}:{PASSWORD}@192.168.68.100:554/h264Preview_01_sub
+    Trackmix:
+      - rtsp://{USERNAME}:{PASSWORD}@192.168.68.73:554/h264Preview_01_main
+    Trackmix_sub:
+      - rtsp://{USERNAME}:{PASSWORD}@192.168.68.73:554/h264Preview_01_sub
+    Trackmixtele:
+      - rtsp://{USERNAME}:{PASSWORD}@192.168.68.73:554/h264Preview_02_main
+    Trackmixtele_sub:
+      - rtsp://{USERNAME}:{PASSWORD}@192.168.68.73:554/h264Preview_02_sub
+    Backdoor:
+      - rtsp://{USERNAME}:{PASSWORD}@192.168.68.71:554/h264Preview_01_main
+    Backdoor_sub:
+      - rtsp://{USERNAME}:{PASSWORD}@192.168.68.71:554/h264Preview_01_sub
+
+cameras:
+  RLC810A:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/RLC810A
+          hwaccel_args: preset-intel-qsv-h265
+          roles:
+            - record
+        - path: rtsp://127.0.0.1:8554/RLC810A_sub
+          roles:
+            - detect
+    zones:
+      zone1:
+        coordinates: 0.415,0.077,0.621,0.14,0.643,0.182,0.166,0.694,0.024,0.366,0.361,0.008,0.409,0.002
+        loitering_time: 5
+        inertia: 3
+      zone2:
+        coordinates: 0.999,0.209,0.674,0.091,0.632,0.132,0.647,0.188,0.165,0.706,0.281,0.998,0.995,0.994
+        loitering_time: 5
+
+detectors:
+  coral:
+    type: edgetpu
+    device: usb
+
+record:
+  enabled: True
+  retain:
+    days: 1
+    mode: motion
+  events:
+    retain:
+      default: 14
+      mode: active_objects
+  sync_recordings: True
+
+birdseye:
+  enabled: true
+  restream: false
+  width: 1280
+  height: 720
+  quality: 8
+  mode: continuous
+
+objects:
+  track:
+    - person
+    - car
+    - bicycle
+    - licence_plate
+
+snapshots:
+  enabled: true
+  bounding_box: true
+  retain:
+    default: 15
+
+version: 0.14
+```
